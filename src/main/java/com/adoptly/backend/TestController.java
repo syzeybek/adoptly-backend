@@ -8,43 +8,57 @@ public class TestController {
 
     @GetMapping("/")
     public String index() {
-        return "<html><body style='font-family: Arial, sans-serif; line-height: 1.4; padding: 30px; max-width: 900px; margin: auto; background-color: #f4f7f6;'>" +
-               "<div style='background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);'>" +
-               "<h1 style='color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px;'>🐾 Adoptly API Rehberi</h1>" +
-               "<p>Proje şu an <b>canlıdadır.</b> Postman testleri için aşağıdaki uç noktaları kullanabilirsiniz:</p>" +
+        return "<html><head><title>Adoptly API Dashboard</title>" +
+               "<style>" +
+               "body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; padding: 40px; color: #333; }" +
+               ".container { max-width: 1000px; margin: auto; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }" +
+               "h1 { color: #2c3e50; text-align: center; border-bottom: 3px solid #3498db; padding-bottom: 15px; }" +
+               "table { width: 100%; border-collapse: collapse; margin-top: 20px; }" +
+               "th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }" +
+               "th { background-color: #f8f9fa; }" +
+               ".btn { padding: 6px 12px; border: none; border-radius: 5px; cursor: pointer; color: white; font-weight: bold; text-decoration: none; display: inline-block; }" +
+               ".get { background-color: #61affe; }" +
+               ".post { background-color: #49cc90; }" +
+               ".put { background-color: #fca130; }" +
+               ".delete { background-color: #f93e3e; }" +
+               "#result-box { margin-top: 30px; padding: 20px; background: #272822; color: #f8f8f2; border-radius: 10px; min-height: 50px; white-space: pre-wrap; font-family: monospace; }" +
+               "</style>" +
+               "<script>" +
+               "function callApi(method, url, body = null) {" +
+               "  const resultBox = document.getElementById('result-box');" +
+               "  resultBox.innerText = 'İstek gönderiliyor...';" +
+               "  fetch(url, { method: method, headers: { 'Content-Type': 'application/json' }, body: body ? JSON.stringify(body) : null })" +
+               "    .then(res => res.ok ? res.json() : res.text())" +
+               "    .then(data => { resultBox.innerText = JSON.stringify(data, null, 2); })" +
+               "    .catch(err => { resultBox.innerText = 'Hata: ' + err; });" +
+               "}" +
+               "</script>" +
+               "</head><body>" +
+               "<div class='container'>" +
+               "<h1>🐾 Adoptly API İnteraktif Test Paneli</h1>" +
+               "<p style='text-align:center;'>Aşağıdaki butonlara tıklayarak API uç noktalarını anlık test edebilirsiniz.</p>" +
                
-               "<h3>1. Hayvan İlan Yönetimi (Animals)</h3>" +
-               "<table border='1' cellpadding='10' style='border-collapse: collapse; width: 100%;'>" +
-               "<tr style='background: #3498db; color: white;'><th>İşlem</th><th>Metot</th><th>Endpoint / Link</th></tr>" +
-               "<tr><td>Yeni İlan Oluştur</td><td><b>POST</b></td><td><code>/api/animals</code></td></tr>" +
-               "<tr><td>Tüm İlanları Listele</td><td><b>GET</b></td><td><a href='/api/animals' target='_blank'>/api/animals</a></td></tr>" +
-               "<tr><td>İlan Detayı (ID:1)</td><td><b>GET</b></td><td><a href='/api/animals/1' target='_blank'>/api/animals/1</a></td></tr>" +
-               "<tr><td>İlan Güncelle (ID:1)</td><td><b>PUT</b></td><td><code>/api/animals/1</code></td></tr>" +
-               "<tr><td>İlan Kaldır (ID:1)</td><td><b>DELETE</b></td><td><code>/api/animals/1</code></td></tr>" +
-               "<tr><td>Arama & Filtreleme</td><td><b>GET</b></td><td><a href='/api/animals/search?species=Cat' target='_blank'>/api/animals/search?species=Cat</a></td></tr>" +
-               "</table>" +
+               "<table>" +
+               "<tr><th>İşlem</th><th>Metot</th><th>Endpoint</th><th>Test Et</th></tr>" +
+               
+               "" +
+               "<tr><td>Tüm İlanlar</td><td><span class='btn get'>GET</span></td><td>/api/animals</td><td><button onclick=\"callApi('GET', '/api/animals')\">Çalıştır</button></td></tr>" +
+               "<tr><td>Hayvan Detay (ID:1)</td><td><span class='btn get'>GET</span></td><td>/api/animals/1</td><td><button onclick=\"callApi('GET', '/api/animals/1')\">Çalıştır</button></td></tr>" +
+               "<tr><td>Kedi Filtrele</td><td><span class='btn get'>GET</span></td><td>/api/animals/search</td><td><button onclick=\"callApi('GET', '/api/animals/search?species=Cat')\">Çalıştır</button></td></tr>" +
+               
+               "" +
+               "<tr><td>Yeni İlan Ekle</td><td><span class='btn post'>POST</span></td><td>/api/animals</td><td><button onclick=\"callApi('POST', '/api/animals', {name:'Pamuk', species:'Cat', age:2, status:'AVAILABLE'})\">Ekle</button></td></tr>" +
+               "<tr><td>Kullanıcı Kayıt</td><td><span class='btn post'>POST</span></td><td>/api/auth/register</td><td><button onclick=\"callApi('POST', '/api/auth/register', {firstName:'Victus', email:'v@test.com', password:'123'})\">Kaydet</button></td></tr>" +
+               "<tr><td>İlan Sil (ID:1)</td><td><span class='btn delete'>DELETE</span></td><td>/api/animals/1</td><td><button onclick=\"callApi('DELETE', '/api/animals/1')\">Sil</button></td></tr>" +
+               "<tr><td>Başvurularım</td><td><span class='btn get'>GET</span></td><td>/api/applications/my</td><td><button onclick=\"callApi('GET', '/api/applications/my?userId=1')\">Listele</button></td></tr>" +
 
-               "<h3>2. Kullanıcı & Güvenlik (Auth)</h3>" +
-               "<table border='1' cellpadding='10' style='border-collapse: collapse; width: 100%;'>" +
-               "<tr style='background: #2ecc71; color: white;'><th>İşlem</th><th>Metot</th><th>Endpoint</th></tr>" +
-               "<tr><td>Kullanıcı Kaydı</td><td><b>POST</b></td><td><code>/api/auth/register</code></td></tr>" +
-               "<tr><td>Giriş Yap</td><td><b>POST</b></td><td><code>/api/auth/login</code></td></tr>" +
                "</table>" +
-
-               "<h3>3. Sahiplenme Başvuruları (Applications)</h3>" +
-               "<table border='1' cellpadding='10' style='border-collapse: collapse; width: 100%;'>" +
-               "<tr style='background: #e67e22; color: white;'><th>İşlem</th><th>Metot</th><th>Endpoint / Link</th></tr>" +
-               "<tr><td>Başvuru Yap</td><td><b>POST</b></td><td><code>/api/applications?userId=1&animalId=1</code></td></tr>" +
-               "<tr><td>Başvurularımı Listele</td><td><b>GET</b></td><td><a href='/api/applications/my?userId=1' target='_blank'>/api/applications/my?userId=1</a></td></tr>" +
-               "</table>" +
+               
+               "<h3>🖥️ API Yanıtı (JSON Output)</h3>" +
+               "<div id='result-box'>Burada henüz bir veri yok. Yukarıdaki butonlardan birine basın!</div>" +
 
                "<br><hr>" +
-               "<p style='text-align: center; color: #7f8c8d;'><b>Geliştiren:</b> Victus (syzeybek) | Adoptly Project 2026</p>" +
+               "<p style='text-align: center;'>Geliştiren: <b>Victus (syzeybek)</b> | Adoptly Projesi 2026</p>" +
                "</div></body></html>";
-    }
-
-    @GetMapping("/api/ping")
-    public String ping() {
-        return "Backend Ayakta!";
     }
 }
