@@ -14,33 +14,32 @@ public class Animal {
     @Column(nullable = false)
     private String name;
 
-    // Java'da 'species' diyeceğiz ama o gidip DB'deki 'breed' sütununa yazacak
+   
     @Column(name = "breed", nullable = false)
     private String species;
 
-    // DİKKAT: DB'de 'text' olduğu için Integer değil String olmalı! 
-    // Postman'den gelen sayıyı (Örn: 2) Spring otomatik metne çevirecek.
+   
     private String age;
 
-    // DB'de yok ama Hibernate "update" komutuyla otomatik ekleyecek
+   
     private String gender;
 
-    // Java'da 'city', DB'de 'location' sütununa gider
+   
     @Column(name = "location")
     private String city;
 
-    // DB'de yok ama Hibernate otomatik ekleyecek
+   
     private String status = "AVAILABLE";
 
-    // Java'da 'description', DB'de 'story' sütununa gider
+   
     @Column(name = "story")
     private String description;
 
-    // DB'de çift tırnakla tanımlandığı için Hibernate'in tam eşleşme bulması şart
+    
     @Column(name = "\"imageUrl\"")
     private String imageUrl;
 
-    // Web tarafındaki veriler bozulmasın diye bu alanları da ekledik
+   
     @Column(name = "\"ownerEmail\"")
     private String ownerEmail;
 
