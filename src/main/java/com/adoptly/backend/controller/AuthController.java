@@ -2,8 +2,10 @@ package com.adoptly.backend.controller;
 
 import com.adoptly.backend.model.User;
 import com.adoptly.backend.repository.UserRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -17,24 +19,21 @@ public class AuthController {
         this.userRepository = userRepository;
     }
 
-    // Üye Ol (Register)
+    // Yeni Kullanıcı Kaydı (Register)
     @PostMapping("/register")
-    public User register(@RequestBody User user) {
-        // Basitlik adına şifreyi şu an düz metin tutuyoruz
-        // Gerçek projede BCrypt ile şifrelenir
-        if (user.getRole() == null) user.setRole("USER");
-        return userRepository.save(user);
+    public ResponseEntity<?> registerUser(@RequestBody User user) {
+        try {
+            // Şifreyi kaydetmeden önce (eğer istersen) şifreleme vs. burada yapılabilir
+            User savedUser = userRepository.save(user);
+            return ResponseEntity.ok(savedUser);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Kayıt başarısız: " + e.getMessage());
+        }
     }
 
-    // Giriş Yap (Login)
-    @PostMapping("/login")
-    public String login(@RequestBody User loginData) {
-        Optional<User> user = userRepository.findByEmail(loginData.getEmail());
-        
-        if (user.isPresent() && user.get().getPassword().equals(loginData.getPassword())) {
-            // Gerçek bir JWT yerine hocana "Simüle edilmiş token" döndürüyoruz
-            return "SUCCESSFUL_LOGIN_TOKEN_FOR_" + user.get().getFirstName().toUpperCase();
-        }
-        throw new RuntimeException("Hatalı e-posta veya şifre!");
+    // Tüm Kullanıcıları Listele (Gerekirse)
+    @GetMapping("/users")
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
 }

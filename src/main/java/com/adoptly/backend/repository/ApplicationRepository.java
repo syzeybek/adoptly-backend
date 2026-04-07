@@ -1,10 +1,12 @@
 package com.adoptly.backend.repository;
 
-import com.adoptly.backend.model.AdoptionApplication;
+import com.adoptly.backend.model.Application;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
+import java.util.UUID;
 
-public interface ApplicationRepository extends JpaRepository<AdoptionApplication, Long> {
-    // Belirli bir kullanıcının başvurularını getirmek için:
-    List<AdoptionApplication> findByUserId(Long userId);
+public interface ApplicationRepository extends JpaRepository<Application, UUID> {
+    
+    // Kullanıcının kendi başvurularını listeleyebilmesi için özel metot
+    List<Application> findByUserId(UUID userId);
 }
